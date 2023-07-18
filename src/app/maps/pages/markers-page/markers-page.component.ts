@@ -76,6 +76,7 @@ export class MarkersPageComponent {
   deleteMarker(index: number) {
     this.markers[index].marker.remove();
     this.markers.splice(index, 1);
+    this.removeFromLocalStorage();
   }
 
 
@@ -108,7 +109,16 @@ export class MarkersPageComponent {
 
       this.addMarker(coords, color)
     });
+  }
 
+  removeFromLocalStorage(){
+    const plainMarkers: PlainMarker[] = this.markers.map(({color, marker}) => {
+      return {
+        color,
+        lngLat: marker.getLngLat().toArray(),
+      }
+    })
+    localStorage.setItem('plainMarkers', JSON.stringify(plainMarkers));
   }
 
 }
